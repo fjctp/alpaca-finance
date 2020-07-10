@@ -29,6 +29,24 @@ export default {
       this.columns[1].filterOptions.filterDropdownItems = L;
     },
   },
+  methods: {
+    formatBigNumber: function(value) {
+      const decimalSymbol = ['K', 'M', 'B', 'T'];
+      
+      if (value < 1000)
+        return value;
+      
+      for (var i=0; i<decimalSymbol.length; i++) {
+        var tmp = Math.round(value / 1000);
+        if (tmp < 1000)
+          return tmp + decimalSymbol[i];
+        value = tmp;
+      }
+    },
+    formatDollar: function(value) {
+      return '$' + this.formatBigNumber(value);
+    }
+  },
   data: function() {
     return {
       columns: [
@@ -70,6 +88,7 @@ export default {
           label: 'CashFlow',
           field: 'freeCashFlow',
           type: 'number',
+          formatFn: this.formatDollar,
         },
         {
           label: 'Debt/Equity',
@@ -85,6 +104,7 @@ export default {
           label: 'Revenues',
           field: 'revenuesUSD',
           type: 'number',
+          formatFn: this.formatDollar,
         },
         {
           label: 'PayoutRatio',
@@ -100,6 +120,7 @@ export default {
           label: 'MarketCap',
           field: 'marketCapitalization',
           type: 'number',
+          formatFn: this.formatBigNumber,
         },
         {
           label: 'GrossMargin',
@@ -110,10 +131,11 @@ export default {
           label: 'TotalDebt',
           field: 'debtUSD',
           type: 'number',
+          formatFn: this.formatDollar,
         },
       ],
     }
-  }
+ }
 }
 </script>
 
