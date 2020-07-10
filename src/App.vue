@@ -12,10 +12,11 @@ import axios from 'axios'
 import FinanceTable from './components/FinanceTable.vue'
 import secret from './config/secret.json';
 
+// axios default settings
 axios.defaults.baseURL = 'https://api.polygon.io';
 axios.defaults.params = secret;
 
-// Get financial data from server
+// getFinancialData(ticker) gets financial data from server
 async function getFinancialData(ticker) {
   const response = await axios.get(`/v2/reference/financials/${ticker}`);
   if (response.status == 200) {
@@ -32,13 +33,13 @@ export default {
   },
   data: function() {
     return { 
-      records: [],
-      ticker: ''
+      records: [], // an array of object. each object represents a data points.
+      ticker: '',
     }
   }, 
   methods: {
     onSubmit: async function() {
-      this.records = [];
+      this.records = []; // reset records before submits
       if (this.ticker != '')
         this.records = await getFinancialData(this.ticker);
     }
