@@ -33,12 +33,12 @@ export default {
     formatBigNumber: function(value) {
       const decimalSymbol = ['K', 'M', 'B', 'T'];
       
-      if (value < 1000)
+      if (Math.abs(value) < 1000)
         return value;
       
       for (var i=0; i<decimalSymbol.length; i++) {
         var tmp = Math.round(value / 1000);
-        if (tmp < 1000)
+        if (Math.abs(tmp) < 1000)
           return tmp + decimalSymbol[i];
         value = tmp;
       }
