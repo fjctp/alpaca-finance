@@ -16,7 +16,18 @@ export default {
     VueGoodTable,
   },
   props: {
-    rows: Array
+    rows: Array,
+  },
+  watch: {
+    rows: function(newRows) {
+      // update period's dropdown list options when this.rows changes
+      var L = [];
+      if (newRows.length > 0) {
+        L = [...new Set(newRows.map(item => item.period))];
+      }
+
+      this.columns[1].filterOptions.filterDropdownItems = L;
+    },
   },
   data: function() {
     return {
@@ -33,7 +44,7 @@ export default {
           filterOptions: {
             enabled: true, // enable filter for this column
             placeholder: 'All', // placeholder for filter input
-            filterDropdownItems: ['Q', 'QA', 'T', 'TA', 'Y', 'YA'], // dropdown (with selected values) instead of text input
+            filterDropdownItems: [], // dropdown (with selected values) instead of text input
             trigger: 'enter', //only trigger on enter not on keyup 
           },
         },
@@ -46,8 +57,6 @@ export default {
           filterOptions: {
             enabled: true, // enable filter for this column
             placeholder: 'All', // placeholder for filter input
-//            filterDropdownItems: ['Q', 'QA', 'T', 'TA', 'Y', 'YA'], // dropdown (with selected values) instead of text input
-//            trigger: 'enter', //only trigger on enter not on keyup 
           },
         },
         {
