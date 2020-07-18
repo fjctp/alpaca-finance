@@ -1,14 +1,15 @@
 <template>
   <div id="app">
-    <input v-model="ticker" placeholder="Symbol">
-    <input v-model="limit" placeholder="Limit">
+    <input type="text" v-model="ticker" placeholder="Symbol">
+    <input type="number" v-model="limit" placeholder="Limit">
     <select v-model="type" id="type">
       <option value="Q">Quarter</option>
       <option value="T">Term</option>
       <option value="Y">Year</option>
     </select>
     <button v-on:click="onSubmit()">Submit</button>
-    <br/><br/>
+    <br/>
+    <br/>
     <FinanceTable v-bind:rows="records"/>
   </div>
 </template>
@@ -22,11 +23,20 @@ import secret from './config/secret.json';
 axios.defaults.baseURL = 'https://api.polygon.io';
 axios.defaults.params = secret;
 
-// getFinancialData(ticker) gets financial data from server
+// getFinancialData(ticker, limit, type) gets financial data from server
 async function getFinancialData(ticker, limit, type) {
   const response = await axios.get(`/v2/reference/financials/${ticker}?limit=${limit}&type=${type}`);
   if (response.status == 200) {
     return response.data.results;
+  }
+  return [];
+}
+
+// getCompanyData(ticker) gets company data from server
+async function getCompanyData(ticker) {
+  const response = await axios.get(`/v1/meta/symbols/${ticker}/company`);
+  if (response.status == 200) {
+    return response.data;
   }
   return [];
 }
@@ -40,16 +50,20 @@ export default {
   data: function() {
     return { 
       records: [], // an array of object. each object represents a data points.
+      company: {},
       ticker: '',
       limit: 5,
-      type: 'Q',
+      type: 'Y',
     }
   }, 
   methods: {
     onSubmit: async function() {
       this.records = []; // reset records before submits
-      if (this.ticker != '')
+      if (this.ticker != '') {
+        this.ticker = this.ticker.toUpperCase();
+        this.company = await getCompanyData(this.ticker);
         this.records = await getFinancialData(this.ticker, this.limit, this.type);
+      }
     }
   }
 }
