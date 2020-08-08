@@ -23,3 +23,5 @@ pnpm-debug.log*
 
 # configurations
 **/config/secret.json
+#Electron-builder output
+/dist_electron
