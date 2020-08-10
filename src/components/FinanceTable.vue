@@ -84,8 +84,22 @@ export default {
           dateInputFormat: 'yyyy-MM-dd',
           dateOutputFormat: 'MMM',
         },
+        /*
+         * Difference between free and net (USE NET CASHFLOW!!!)
+         * Free cash flow is the amount of cash that is available 
+         * for stockholders after the extraction of all expenses 
+         * from the total revenue. The net cash flow is the amount 
+         * of profit the company has with the costs that it pays 
+         * currently, excluding long-term debts or bills.
+         */
         {
-          label: 'CashFlow',
+          label: 'Net CashFlow',
+          field: 'netCashFlow',
+          type: 'number',
+          formatFn: this.formatDollar,
+        },
+        {
+          label: 'Free CashFlow',
           field: 'freeCashFlow',
           type: 'number',
           formatFn: this.formatDollar,
